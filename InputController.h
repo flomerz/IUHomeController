@@ -1,15 +1,15 @@
 #ifndef INPUTCONTROLLER.H
 #define INPUTCONTROLLER.H
 
-#include "State.h"
+#include "StateMachine.h"
 
 struct InputController {
-	virtual State & operator()(State & state)=0;
+	virtual void operator()(StateMachine &stateMachine)=0;
 };
 
 struct DummyInputController : InputController{
-	State & operator()(State & state) {
-		return state.turnOff();
+	void operator()(StateMachine &stateMachine) {
+		stateMachine.turnOff();
 	}
 };
 

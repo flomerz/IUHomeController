@@ -25,7 +25,7 @@ public:
 			currentBlue = blue;
 
 			char colorStr[32];
-			sprintf(colorStr, "R: %i, G: %i, B: %i", red, green, blue);
+			sprintf(colorStr, "R: %i, G: %i, B: %i\0", red, green, blue);
 			Serial.println(colorStr);
 			
 			analogWrite(RED_PIN, red);

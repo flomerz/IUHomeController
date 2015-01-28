@@ -1,14 +1,11 @@
 // IULedController.ino
-#include "State.h"
-#include "LedOutputHelper.h"
+#include "StateMachine.h"
 #include "InputController.h"
+#include "LedOutputHelper.h"
 
 DummyInputController dummyInputController = DummyInputController();
 
-ColorState colorState = ColorState(255, 255, 255);
-OffState offState = OffState(&colorState);
-
-State & state = colorState;
+StateMachine stateMachine = StateMachine();
 
 void setup() {
 	Serial.begin(9600);
@@ -16,9 +13,13 @@ void setup() {
 }
 
 void loop() {
-	state = dummyInputController(state);
+	//dummyInputController(state);
+	stateMachine.turnOn();
+	stateMachine.run();
 	delay(1000);
-	state.run();
+
+	stateMachine.turnOff();
+	stateMachine.run();
 	delay(1000);
 }
 
