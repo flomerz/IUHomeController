@@ -1,6 +1,8 @@
 #ifndef LEDOUTPUTHELPER.H
 #define LEDOUTPUTHELPER.H
 
+#include "Logger.h"
+
 #define RED_PIN 5
 #define GREEN_PIN 3
 #define BLUE_PIN 6
@@ -9,9 +11,7 @@ byte currentRed;
 byte currentGreen;
 byte currentBlue;
 
-class LedOutputHelper {
-
-public:
+struct LedOutputHelper {
 	static void initPins() {
 		pinMode(RED_PIN, OUTPUT);
   		pinMode(GREEN_PIN, OUTPUT);
@@ -19,14 +19,14 @@ public:
  	}
 
 	static void setColor(byte const & red, byte const & green, byte const & blue) {
-		if (currentRed != red && currentGreen != green && currentBlue != blue) {
+		if (currentRed != red || currentGreen != green || currentBlue != blue) {
 			currentRed = red;
 			currentGreen = green;
 			currentBlue = blue;
 
 			char colorStr[32];
 			sprintf(colorStr, "R: %i, G: %i, B: %i\0", red, green, blue);
-			Serial.println(colorStr);
+			LOG(colorStr);
 			
 			analogWrite(RED_PIN, red);
 	    	analogWrite(GREEN_PIN, green);

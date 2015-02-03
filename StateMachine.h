@@ -1,31 +1,36 @@
 #ifndef STATEMACHINE.H
 #define STATEMACHINE.H
 
+#include "Logger.h"
 #include "State.h"
 
 class StateMachine {
 	State *_state;
 	void setState(State* state) {
 		if(_state != state) {
+			LOG("StateMachine.delete()");
 			delete(_state);
 			_state = state;
 		}
 	}
 public:
-	StateMachine() {
-		ColorState *colorState = new ColorState(255, 255, 255);
-		_state = colorState;
+	StateMachine(State & initState) {
+		_state = &initState;
 	}
 	void run() {
 		_state->run();
 	}
 
 	void turnOff() {
+		LOG("StateMachine.turnOff()");
 		setState(_state->turnOff());
 	};
-
 	void turnOn() {
+		LOG("StateMachine.turnOn()");
 		setState(_state->turnOn());
+	}
+	void setColor(byte const & red, byte const & green, byte const & blue) {
+		setState(_state->setColor(red, green, blue));
 	}
 };
 

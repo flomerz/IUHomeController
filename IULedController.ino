@@ -1,26 +1,33 @@
 // IULedController.ino
+#include "Logger.h"
+
 #include "StateMachine.h"
-#include "InputController.h"
-#include "LedOutputHelper.h"
+#include "ColorState.h"
+
+#include "RCInputController.h"
 
 DummyInputController dummyInputController = DummyInputController();
+RCInputController rcInputController = RCInputController();
 
-StateMachine stateMachine = StateMachine();
+ColorState initState = ColorState(255, 255, 255);
+StateMachine stateMachine = StateMachine(initState);
 
 void setup() {
-	Serial.begin(9600);
+	initLogger();
 	LedOutputHelper::initPins();
 }
 
 void loop() {
-	//dummyInputController(state);
+	dummyInputController(stateMachine);
 	stateMachine.turnOn();
 	stateMachine.run();
-	delay(1000);
+	// delay(10);
+
+	rcInputController(stateMachine);
+	stateMachine.run();
+	// delay(10);
 
 	stateMachine.turnOff();
 	stateMachine.run();
-	delay(1000);
+	// delay(10);
 }
-
-

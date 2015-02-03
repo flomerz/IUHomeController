@@ -9,7 +9,7 @@ struct InputController {
 
 struct DummyInputController : InputController{
 	void operator()(StateMachine &stateMachine) {
-		stateMachine.turnOff();
+		stateMachine.turnOn();
 	}
 };
 
