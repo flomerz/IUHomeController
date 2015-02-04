@@ -11,11 +11,4 @@ public:
 	virtual void check()=0;
 };
 
-struct DummyInputController : InputController{
-	DummyInputController(StateMachine & stateMachine) : InputController(stateMachine) {}
-	void check() {
-		_stateMachine.turnOn();
-	}
-};
-
 #endif
