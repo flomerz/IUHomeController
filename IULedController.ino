@@ -1,6 +1,11 @@
 // IULedController.ino
+
+// Libraries
+#include <Wire.h>
+#include <ds3231.h>
 #include <IRremote.h>
 
+// Project
 #include "Logger.h"
 
 #include "StateMachine.h"
@@ -9,6 +14,9 @@
 #include "RCInputController.h"
 #include "MotionInputController.h"
 #include "IRBarrierInputController.h"
+
+#include "RTCHelper.h"
+
 
 ColorState initState(255, 255, 255);
 StateMachine stateMachine(initState);
@@ -25,14 +33,17 @@ void setup() {
 	motionInputController.init();
 	irBarrierInputController.init();
 	
-	// init output
+	// init helper
 	LedOutputHelper::init();
+	RTCHelper::init();
 }
 
 void loop() {
+	RTCHelper::fetchTime(millis());
+
+	stateMachine.run();
+
 	rcInputController.check();
 	motionInputController.check();
 	irBarrierInputController.check();
-
-	stateMachine.run();
-}
+ }
