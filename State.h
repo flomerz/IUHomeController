@@ -11,6 +11,10 @@ struct State {
 		LOG("State()");
 	}
 	virtual State* clone()=0;
+
+	virtual bool isOn() {
+		return true;
+	}
 	
 	// LOOP FUNCTION
 	virtual void run()=0;

@@ -2,6 +2,7 @@
 #define OFFSTATE.H
 
 #include "State.h"
+#include "LedOutputHelper.h"
 
 class OffState : public State {
 	State *_oldState;
@@ -17,6 +18,10 @@ public:
 	State* clone() {
 		LOG("OffState.clone()");
 		return new OffState(*this);
+	}
+
+	bool isOn() {
+		return false;
 	}
 	
 	// LOOP FUNCTION

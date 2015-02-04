@@ -1,4 +1,6 @@
 // IULedController.ino
+#include <IRremote.h>
+
 #include "Logger.h"
 
 #include "StateMachine.h"
@@ -6,28 +8,20 @@
 
 #include "RCInputController.h"
 
-DummyInputController dummyInputController = DummyInputController();
-RCInputController rcInputController = RCInputController();
+ColorState initState(255, 255, 255);
+StateMachine stateMachine(initState);
 
-ColorState initState = ColorState(255, 255, 255);
-StateMachine stateMachine = StateMachine(initState);
+DummyInputController dummyInputController(stateMachine);
+RCInputController rcInputController(stateMachine);
 
 void setup() {
 	initLogger();
-	LedOutputHelper::initPins();
+	rcInputController.init();
+	LedOutputHelper::init();
 }
 
 void loop() {
-	dummyInputController(stateMachine);
-	stateMachine.turnOn();
+	rcInputController.check();
 	stateMachine.run();
-	// delay(10);
-
-	rcInputController(stateMachine);
-	stateMachine.run();
-	// delay(10);
-
-	stateMachine.turnOff();
-	stateMachine.run();
-	// delay(10);
+	delay(1000);
 }

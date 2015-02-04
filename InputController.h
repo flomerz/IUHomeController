@@ -3,13 +3,18 @@
 
 #include "StateMachine.h"
 
-struct InputController {
-	virtual void operator()(StateMachine &stateMachine)=0;
+class InputController {
+protected:
+	StateMachine &_stateMachine;
+public:
+	InputController(StateMachine & stateMachine) : _stateMachine(stateMachine) {}
+	virtual void check()=0;
 };
 
 struct DummyInputController : InputController{
-	void operator()(StateMachine &stateMachine) {
-		stateMachine.turnOn();
+	DummyInputController(StateMachine & stateMachine) : InputController(stateMachine) {}
+	void check() {
+		_stateMachine.turnOn();
 	}
 };
 

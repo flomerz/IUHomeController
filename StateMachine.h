@@ -24,10 +24,17 @@ public:
 	void turnOff() {
 		LOG("StateMachine.turnOff()");
 		setState(_state->turnOff());
-	};
+	}
 	void turnOn() {
 		LOG("StateMachine.turnOn()");
 		setState(_state->turnOn());
+	}
+	void toggleOn() {
+		if (_state->isOn()) {
+			turnOff();
+		} else {
+			turnOn();
+		}
 	}
 	void setColor(byte const & red, byte const & green, byte const & blue) {
 		setState(_state->setColor(red, green, blue));
