@@ -15,7 +15,7 @@ class StateMachine {
 	}
 public:
 	StateMachine(State & initState) {
-		_state = &initState;
+		_state = initState.clone();
 	}
 	void run() {
 		_state->run();
