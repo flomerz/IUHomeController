@@ -42,7 +42,6 @@ public:
 					_stateMachine.turnOn();
 				}
 			} else {
-				RTCHelper::printTime();
 				LOG("Motion OFF");
 				_stateMachine.turnOff();
 			}

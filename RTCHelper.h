@@ -22,6 +22,7 @@ struct RTCHelper {
 		if (currentMillis - lastFetchMillis > FETCH_INTERVAL) {
 			lastFetchMillis = currentMillis;
 			DS3231_get(&lastTimestamp);
+			printTime();
 		}
 	}
 	
