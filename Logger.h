@@ -7,7 +7,6 @@ void initLogger() {
 	Serial.begin(9600);
 }
 
-
 template <typename T>
 void LOG(T msg) {
 	if (debug) {
