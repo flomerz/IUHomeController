@@ -6,22 +6,16 @@
 
 #include <IRremote.h>
 
-#define IR_PIN 11
+// KEYS
+#include "RC44.h"
+// COLORS
+#include "Colors.h"
+
+#define IR_PIN 10
 
 #define RED_MASK 0xFF0000
 #define GREEN_MASK 0x00FF00
 #define BLUE_MASK 0x0000FF
-
-// KEYS
-#define KEY_ON 0xFF02FD
-#define KEY_RED 0xFF1AE5
-#define KEY_GREEN 0xFF9A65
-#define KEY_BLUE 0xFFA25D
-
-// COLORS
-#define RED 0xFF0000
-#define GREEN 0x00FF00
-#define BLUE 0x0000FF
 
 IRrecv irReceiver(IR_PIN);
 decode_results irResults;
