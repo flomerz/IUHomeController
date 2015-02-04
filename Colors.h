@@ -1,8 +1,9 @@
 #ifndef COLORS.H
 #define COLORS.H
 
-//	INTENSIVITY:	0	1	2	3	4	5	6	7	8
-//			HEX:	0	1	4	8	10	20	40	80	FF
+//	INTENSIVITY:   0	1	2	3	4	5	6	7	8
+//	HEX:           0	1	4	8	10	20	40	80	FF
+//	DEC:           0	1	4	8	16	32	64	128	255
 
 #define RED 0xFF0000
 #define GREEN 0x00FF00

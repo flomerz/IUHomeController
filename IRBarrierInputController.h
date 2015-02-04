@@ -4,7 +4,7 @@
 #include "InputController.h"
 #include "Logger.h"
 
-#define IRBARRIER_PIN 2
+#define IRBARRIER_PIN 4
 
 struct IRBarrierInputController : InputController {
 	IRBarrierInputController(StateMachine & stateMachine) : InputController(stateMachine) {}
@@ -12,7 +12,7 @@ struct IRBarrierInputController : InputController {
 		pinMode(IRBARRIER_PIN, INPUT);
 	}
 	void check() {
-		if (digitalRead(IRBARRIER_PIN)) {
+		if (!digitalRead(IRBARRIER_PIN)) {
 			_stateMachine.turnOff();
 		}
 	}

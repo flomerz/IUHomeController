@@ -1,7 +1,7 @@
 #ifndef LOGGER.H
 #define LOGGER.H
 
-bool debug = true;
+bool debug = false;
 
 void initLogger() {
 	Serial.begin(9600);
