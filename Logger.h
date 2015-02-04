@@ -1,7 +1,7 @@
 #ifndef LOGGER.H
 #define LOGGER.H
 
-bool debug = false;
+#define DEBUG false
 
 void initLogger() {
 	Serial.begin(9600);
@@ -9,7 +9,7 @@ void initLogger() {
 
 template <typename T>
 void LOG(T msg) {
-	if (debug) {
+	if (DEBUG) {
 		Serial.println(msg);
 	}
 }
@@ -21,7 +21,7 @@ void INFO(T msg) {
 
 template <typename T>
 void LOG(T msg, int format) {
-	if (debug) {
+	if (DEBUG) {
 		Serial.println(msg, format);
 	}
 }

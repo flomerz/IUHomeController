@@ -18,11 +18,11 @@ struct RTCHelper {
 		DS3231_init(DS3231_INTCN);
 	}
 
-	static void fetchTime(unsigned int currentMillis) {
+	static void fetchTime(unsigned long currentMillis) {
 		if (currentMillis - lastFetchMillis > FETCH_INTERVAL) {
 			lastFetchMillis = currentMillis;
 			DS3231_get(&lastTimestamp);
-			printTime();
+			if (DEBUG) printTime();
 		}
 	}
 	
@@ -33,7 +33,7 @@ struct RTCHelper {
 	static void printTime() {
 		char buff[50];
 		sprintf(buff, "%02d.%02d.%d %02d:%02d:%02d", lastTimestamp.mday, lastTimestamp.mon, lastTimestamp.year, lastTimestamp.hour, lastTimestamp.min, lastTimestamp.sec);
-		INFO(buff);
+		LOG(buff);
 	}
 };
 
