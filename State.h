@@ -26,6 +26,8 @@ struct State {
 		return &*this;
 	}
 	virtual State* setColor(byte const & red, byte const & green, byte const & blue);
+	virtual void turnLighter() {}
+	virtual void turnDarker() {}
 };
 
 #endif

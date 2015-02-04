@@ -8,6 +8,17 @@ class ColorState : public State {
 	byte _red;
 	byte _green;
 	byte _blue;
+
+	int intensivity;
+	byte currentRed;
+	byte currentGreen;
+	byte currentBlue;
+
+	void turnBrightness() {
+		currentRed = min(_red * pow(2, intensivity), 255);
+		currentGreen = min(_green * pow(2, intensivity), 255);
+		currentBlue = min(_blue * pow(2, intensivity), 255);
+	}
 public:
 	~ColorState() {
 		LOG("~ColorState()");
@@ -17,6 +28,11 @@ public:
 		_red = red;
 		_green = green;
 		_blue = blue;
+
+		intensivity = 0;
+		currentRed = red;
+		currentGreen = green;
+		currentBlue = blue;
 	}
 	State* clone() {
 		LOG("ColorState.clone()");
@@ -26,7 +42,17 @@ public:
 	// LOOP FUNCTION
 	void run() {
 		LOG("ColorState.run()");
-		LedOutputHelper::setColor(_red, _green, _blue);
+		LedOutputHelper::setColor(currentRed, currentGreen, currentBlue);
+	}
+
+	// TRIGGERS
+	void turnLighter() {
+		intensivity += intensivity < 8 ? 1 : 0;
+		turnBrightness();
+	}
+	void turnDarker() {
+		intensivity -= intensivity > -8 ? 1 : 0;
+		turnBrightness();
 	}
 };
 

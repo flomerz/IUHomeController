@@ -37,18 +37,24 @@ public:
 		if (irReceiver.decode(&irResults)) {
 			LOG(irResults.value, HEX);
 			switch(irResults.value) {
-				case KEY_ON:
-					_stateMachine.toggleOn();
-					break;
-				case KEY_RED:
-					setColor(RED);
-					break;
-				case KEY_GREEN:
-					setColor(GREEN);
-					break;
-				case KEY_BLUE:
-					setColor(BLUE);
-					break;
+				case KEY_1:	_stateMachine.turnLighter(); break;
+				case KEY_2:	_stateMachine.turnDarker(); break;
+				case KEY_4:	_stateMachine.toggleOn(); break;
+				
+				case KEY_5: setColor(RED); break;
+				case KEY_6: setColor(GREEN); break;
+				case KEY_7: setColor(BLUE);	break;
+				case KEY_8: setColor(WHITE); break;
+				
+				case KEY_9: setColor(LIGHTRED); break;
+				case KEY_10: setColor(LIGHTGREEN); break;
+				case KEY_11: setColor(LIGHTBLUE); break;
+				case KEY_12: setColor(PINK); break;
+				
+				case KEY_13: setColor(ORANGE); break;
+				case KEY_14: setColor(CYAN); break;
+				case KEY_15: setColor(PURPLE); break;
+				case KEY_16: setColor(LIGHTPINK); break;
 			}
 			irReceiver.resume();
 		}

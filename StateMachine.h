@@ -39,6 +39,12 @@ public:
 	void setColor(byte const & red, byte const & green, byte const & blue) {
 		setState(_state->setColor(red, green, blue));
 	}
+	void turnLighter() {
+		_state->turnLighter();
+	}
+	void turnDarker() {
+		_state->turnDarker();
+	}
 };
 
 #endif
