@@ -2,6 +2,7 @@
 #include "OffState.h"
 #include "ColorState.h"
 
+
 State* State::turnOff() {
 	LOG("State.turnOff()");
 	State *oldState = &*this;

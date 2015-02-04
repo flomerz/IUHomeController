@@ -3,15 +3,18 @@
 
 #include "Logger.h"
 
+
 #define RED_PIN 5
 #define GREEN_PIN 3
 #define BLUE_PIN 6
+
 
 byte currentRed;
 byte currentGreen;
 byte currentBlue;
 
 struct LedOutputHelper {
+
 	static void init() {
 		pinMode(RED_PIN, OUTPUT);
 		pinMode(GREEN_PIN, OUTPUT);

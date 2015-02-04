@@ -4,8 +4,11 @@
 #include "Logger.h"
 #include "State.h"
 
+
 class StateMachine {
+
 	State *_state;
+
 	void setState(State* state) {
 		if(_state != state) {
 			LOG("StateMachine.delete()");
@@ -13,10 +16,12 @@ class StateMachine {
 			_state = state;
 		}
 	}
+
 public:
 	StateMachine(State & initState) {
 		_state = initState.clone();
 	}
+
 	void run() {
 		_state->run();
 	}
@@ -25,10 +30,12 @@ public:
 		LOG("StateMachine.turnOff()");
 		setState(_state->turnOff());
 	}
+
 	void turnOn() {
 		LOG("StateMachine.turnOn()");
 		setState(_state->turnOn());
 	}
+
 	void toggleOn() {
 		if (_state->isOn()) {
 			turnOff();
@@ -36,12 +43,15 @@ public:
 			turnOn();
 		}
 	}
+
 	void setColor(byte const & red, byte const & green, byte const & blue) {
 		setState(_state->setColor(red, green, blue));
 	}
+
 	void turnLighter() {
 		_state->turnLighter();
 	}
+
 	void turnDarker() {
 		_state->turnDarker();
 	}
