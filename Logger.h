@@ -15,6 +15,11 @@ void LOG(T msg) {
 }
 
 template <typename T>
+void INFO(T msg) {
+	Serial.println(msg);
+}
+
+template <typename T>
 void LOG(T msg, int format) {
 	if (debug) {
 		Serial.println(msg, format);

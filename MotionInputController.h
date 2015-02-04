@@ -20,7 +20,7 @@ class MotionInputController : public InputController {
 	bool isNight() {
 		unsigned int hour = RTCHelper::getHour();
 		// 01:00 - 07:00
-		return hour > 1 && hour < 27;
+		return hour > 1 && hour < 7;
 	}
 
 public:
@@ -31,18 +31,21 @@ public:
 	}
 
 	void check() {
-		if (digitalRead(MOTION_PIN)) {
-			LOG("Motion ON");
-			if (validTime()) {
-				LOG("Time OK");
-				_stateMachine.turnOn();
-				if(isNight()) {
-					_stateMachine.setColor(0, 0, 128);
+		if (_stateMachine.detectMotion()) {
+			if (digitalRead(MOTION_PIN)) {
+				LOG("Motion ON");
+				if (validTime()) {
+					LOG("Time OK");
+					if(isNight()) {
+						_stateMachine.setColor(0, 0, 128);
+					}
+					_stateMachine.turnOn();
 				}
+			} else {
+				RTCHelper::printTime();
+				LOG("Motion OFF");
+				_stateMachine.turnOff();
 			}
-		} else {
-			LOG("Motion OFF");
-			_stateMachine.turnOff();
 		}
 	}
 };

@@ -5,9 +5,14 @@
 #include "State.h"
 
 
+#define MOTION_BLOCK_MILLIS 60000
+
+
 class StateMachine {
 
 	State *_state;
+
+	unsigned long motionBlockMillis;
 
 	void setState(State* state) {
 		if(_state != state) {
@@ -20,6 +25,7 @@ class StateMachine {
 public:
 	StateMachine(State & initState) {
 		_state = initState.clone();
+		unblockMotion();
 	}
 
 	void run() {
@@ -54,6 +60,18 @@ public:
 
 	void turnDarker() {
 		_state->turnDarker();
+	}
+
+	void blockMotion() {
+		motionBlockMillis = millis();
+	}
+
+	void unblockMotion() {
+		motionBlockMillis = -MOTION_BLOCK_MILLIS;
+	}
+
+	bool detectMotion() {
+		return millis() - motionBlockMillis > MOTION_BLOCK_MILLIS; 
 	}
 };
 

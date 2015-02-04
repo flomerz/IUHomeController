@@ -18,6 +18,7 @@ struct IRBarrierInputController : InputController {
 
 	void check() {
 		if (!digitalRead(IRBARRIER_PIN)) {
+			_stateMachine.blockMotion();
 			_stateMachine.turnOff();
 		}
 	}

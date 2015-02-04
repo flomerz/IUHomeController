@@ -45,7 +45,8 @@ public:
 			switch(irResults.value) {
 				case KEY_1:	_stateMachine.turnLighter(); break;
 				case KEY_2:	_stateMachine.turnDarker(); break;
-				case KEY_4:	_stateMachine.toggleOn(); break;
+				case KEY_3:	_stateMachine.unblockMotion(); break;
+				case KEY_4:	_stateMachine.blockMotion(); _stateMachine.toggleOn(); break;
 				
 				case KEY_5: setColor(RED); break;
 				case KEY_6: setColor(GREEN); break;
