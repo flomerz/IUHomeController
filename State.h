@@ -36,8 +36,14 @@ struct State {
 	virtual State* setColor(byte const & red, byte const & green, byte const & blue);
 
 	virtual void turnLighter() {}
+	virtual void turnRedLighter() {}
+	virtual void turnGreenLighter() {}
+	virtual void turnBlueLighter() {}
 
 	virtual void turnDarker() {}
+	virtual void turnRedDarker() {}
+	virtual void turnGreenDarker() {}
+	virtual void turnBlueDarker() {}
 };
 
 #endif

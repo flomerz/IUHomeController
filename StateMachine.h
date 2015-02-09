@@ -57,11 +57,28 @@ public:
 	void turnLighter() {
 		_state->turnLighter();
 	}
+	void turnRedLighter() {
+		_state->turnRedLighter();
+	}
+	void turnGreenLighter() {
+		_state->turnGreenLighter();
+	}
+	void turnBlueLighter() {
+		_state->turnBlueLighter();
+	}
 
 	void turnDarker() {
 		_state->turnDarker();
 	}
-
+	void turnRedDarker() {
+		_state->turnRedDarker();
+	}
+	void turnGreenDarker() {
+		_state->turnGreenDarker();
+	}
+	void turnBlueDarker() {
+		_state->turnBlueDarker();
+	}
 	void blockMotion() {
 		motionBlockMillis = millis();
 	}

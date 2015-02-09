@@ -1,4 +1,4 @@
-#ifndef RCINPUTCONTROLLER.H
+ #ifndef RCINPUTCONTROLLER.H
 #define RCINPUTCONTROLLER.H
 
 #include "InputController.h"
@@ -62,6 +62,14 @@ public:
 				case KEY_14: setColor(CYAN); break;
 				case KEY_15: setColor(PURPLE); break;
 				case KEY_16: setColor(LIGHTPINK); break;
+
+				case KEY_25: LOG("RED UP"); _stateMachine.turnRedLighter(); break;
+				case KEY_26: LOG("GREEN UP"); _stateMachine.turnGreenLighter(); break;
+				case KEY_27: LOG("BLUE UP"); _stateMachine.turnBlueLighter(); break;
+
+				case KEY_29: _stateMachine.turnRedDarker(); break;
+				case KEY_30: _stateMachine.turnGreenDarker(); break;
+				case KEY_31: _stateMachine.turnBlueDarker(); break;
 			}
 			irReceiver.resume();
 		}

@@ -3,23 +3,33 @@
 
 #include "State.h"
 #include "LedOutputHelper.h"
+#include "Colors.h"
 
 
 class ColorState : public State {
 
+	// orig colors
 	byte _red;
 	byte _green;
 	byte _blue;
 
-	int intensivity;
+	// colors displayed
 	byte currentRed;
 	byte currentGreen;
 	byte currentBlue;
 
-	void turnBrightness() {
-		currentRed = min(_red * pow(2, intensivity), 255);
-		currentGreen = min(_green * pow(2, intensivity), 255);
-		currentBlue = min(_blue * pow(2, intensivity), 255);
+	unsigned int intensivityRed;
+	unsigned int intensivityGreen;
+	unsigned int intensivityBlue;
+
+	void calcRedBrightness() {
+		currentRed = getColor(intensivityRed);
+	}
+	void calcGreenBrightness() {
+		currentGreen = getColor(intensivityGreen);
+	}
+	void calcBlueBrightness() {
+		currentBlue = getColor(intensivityBlue);
 	}
 
 public:
@@ -33,7 +43,10 @@ public:
 		_green = green;
 		_blue = blue;
 
-		intensivity = 0;
+		intensivityRed = getIntensivity(red);
+		intensivityGreen = getIntensivity(green);
+		intensivityBlue = getIntensivity(blue);
+
 		currentRed = red;
 		currentGreen = green;
 		currentBlue = blue;
@@ -47,20 +60,52 @@ public:
 
 	// LOOP FUNCTION
 	void run() {
-		LOG("ColorState.run()");
+		// LOG("ColorState.run()");
 		LedOutputHelper::setColor(currentRed, currentGreen, currentBlue);
 	}
 
 
 	// TRIGGERS
 	void turnLighter() {
-		intensivity += intensivity < 8 ? 1 : 0;
-		turnBrightness();
+		if(_red > 0) {
+			turnRedLighter();
+		}
+		if(_green > 0) {
+			turnGreenLighter();
+		}
+		if(_blue > 0) {
+			turnBlueLighter();
+		}
+	}
+	void turnRedLighter() {
+		intensivityRed += intensivityRed < 16  ? 1 : 0;
+		calcRedBrightness();
+	}
+	void turnGreenLighter() {
+		intensivityGreen += intensivityGreen < 16 ? 1 : 0;
+		calcGreenBrightness();
+	}
+	void turnBlueLighter() {
+		intensivityBlue += intensivityBlue < 16 ? 1 : 0;
+		calcBlueBrightness();
 	}
 
 	void turnDarker() {
-		intensivity -= intensivity > -8 ? 1 : 0;
-		turnBrightness();
+		turnRedDarker();
+		turnGreenDarker();
+		turnBlueDarker();
+	}
+	void turnRedDarker() {
+		intensivityRed -= intensivityRed > 1 ? 1 : 0;
+		calcRedBrightness();
+	}
+	void turnGreenDarker() {
+		intensivityGreen -= intensivityGreen > 1 ? 1 : 0;
+		calcGreenBrightness();
+	}
+	void turnBlueDarker() {
+		intensivityBlue -= intensivityBlue > 1 ? 1 : 0;
+		calcBlueBrightness();
 	}
 };
 
