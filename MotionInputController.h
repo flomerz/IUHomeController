@@ -31,16 +31,13 @@ public:
 	}
 
 	void check() {
-		if (_stateMachine.detectMotion()) {
+		if (_stateMachine.detectMotion() && validTime()) {
 			if (digitalRead(MOTION_PIN)) {
 				LOG("Motion ON");
-				if (validTime()) {
-					LOG("Time OK");
-					if(isNight()) {
-						_stateMachine.setColor(0, 0, 128);
-					}
-					_stateMachine.turnOn();
+				if(isNight()) {
+					_stateMachine.setColor(0, 0, 128);
 				}
+				_stateMachine.turnOn();
 			} else {
 				LOG("Motion OFF");
 				_stateMachine.turnOff();
