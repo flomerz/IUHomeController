@@ -4,8 +4,8 @@
 #include "Logger.h"
 
 
-#define RED_PIN 5
-#define GREEN_PIN 3
+#define RED_PIN 3
+#define GREEN_PIN 5
 #define BLUE_PIN 6
 
 

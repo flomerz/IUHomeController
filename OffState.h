@@ -32,7 +32,7 @@ public:
 
 	// LOOP FUNCTION
 	void run() {
-		LOG("OffState.run()");
+		// LOG("OffState.run()");
 		LedOutputHelper::setColor(0, 0, 0);
 	}
 

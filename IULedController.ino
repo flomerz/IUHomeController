@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <ds3231.h>
 #include <IRremote.h>
+#include <SoftwareSerial.h>
 
 // Project
 #include "Logger.h"

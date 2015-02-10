@@ -44,6 +44,7 @@ public:
 	}
 
 	void toggleOn() {
+		LOG("StateMachine.toggleOn()");
 		if (_state->isOn()) {
 			turnOff();
 		} else {

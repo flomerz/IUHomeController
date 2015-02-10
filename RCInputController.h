@@ -12,7 +12,7 @@
 #include "Colors.h"
 
 
-#define IR_PIN 10
+#define IR_PIN 7
 
 
 IRrecv irReceiver(IR_PIN);
@@ -50,9 +50,9 @@ struct RCInputController : InputController {
 				case KEY_15: _stateMachine.setColor(PURPLE); break;
 				case KEY_16: _stateMachine.setColor(LIGHTPINK); break;
 
-				case KEY_25: LOG("RED UP"); _stateMachine.turnRedLighter(); break;
-				case KEY_26: LOG("GREEN UP"); _stateMachine.turnGreenLighter(); break;
-				case KEY_27: LOG("BLUE UP"); _stateMachine.turnBlueLighter(); break;
+				case KEY_25: _stateMachine.turnRedLighter(); break;
+				case KEY_26: _stateMachine.turnGreenLighter(); break;
+				case KEY_27: _stateMachine.turnBlueLighter(); break;
 
 				case KEY_29: _stateMachine.turnRedDarker(); break;
 				case KEY_30: _stateMachine.turnGreenDarker(); break;

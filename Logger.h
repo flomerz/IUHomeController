@@ -1,29 +1,37 @@
 #ifndef LOGGER.H
 #define LOGGER.H
 
+#include <SoftwareSerial.h>
+
+#define RX_PIN 13
+#define TX_PIN 12
+
+
 #define DEBUG false
 
 
+SoftwareSerial logSerial(RX_PIN, TX_PIN);
+
 void initLogger() {
-	Serial.begin(9600);
+	logSerial.begin(9600);
 }
 
 template <typename T>
 void LOG(T msg) {
 	if (DEBUG) {
-		Serial.println(msg);
+		logSerial.println(msg);
 	}
 }
 
 template <typename T>
 void INFO(T msg) {
-	Serial.println(msg);
+	logSerial.println(msg);
 }
 
 template <typename T>
 void LOG(T msg, int format) {
 	if (DEBUG) {
-		Serial.println(msg, format);
+		logSerial.println(msg, format);
 	}
 }
 
