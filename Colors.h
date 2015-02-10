@@ -11,6 +11,10 @@ FORMULA: 2^(INTENSIVITY/2) - 0.5 -> cast to int, round down
 
 #define ROUND_OFFSET 0.5
 
+#define RED_MASK 0xFF0000
+#define GREEN_MASK 0x00FF00
+#define BLUE_MASK 0x0000FF
+
 
 #define RED 0xFF0000
 #define GREEN 0x00FF00
@@ -27,13 +31,25 @@ FORMULA: 2^(INTENSIVITY/2) - 0.5 -> cast to int, round down
 #define PURPLE 0xFF00FF
 #define LIGHTPINK 0xFF0010
 
+#define NIGHTBLUE 0x000010
 
-unsigned int getIntensivity(byte color) {
+
+byte red(long rgb) {
+	return (RED_MASK & rgb) >> 16;
+}
+byte green(long rgb) {
+	return (GREEN_MASK & rgb) >> 8;
+}
+byte blue(long rgb) {
+	return BLUE_MASK & rgb;
+}
+
+unsigned int convertToIntensivity(byte color) {
 	if (!color) return 1;
 	return (log(color) / log(2)) * 2 + 0.5;
 }
 
-byte getColor(unsigned int intensivity) {
+byte convertToColor(unsigned int intensivity) {
 	return pow(2, intensivity / 2.0) - 0.5;
 }
 

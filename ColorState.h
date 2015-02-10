@@ -23,13 +23,13 @@ class ColorState : public State {
 	unsigned int intensivityBlue;
 
 	void calcRedBrightness() {
-		currentRed = getColor(intensivityRed);
+		currentRed = convertToColor(intensivityRed);
 	}
 	void calcGreenBrightness() {
-		currentGreen = getColor(intensivityGreen);
+		currentGreen = convertToColor(intensivityGreen);
 	}
 	void calcBlueBrightness() {
-		currentBlue = getColor(intensivityBlue);
+		currentBlue = convertToColor(intensivityBlue);
 	}
 
 public:
@@ -43,9 +43,9 @@ public:
 		_green = green;
 		_blue = blue;
 
-		intensivityRed = getIntensivity(red);
-		intensivityGreen = getIntensivity(green);
-		intensivityBlue = getIntensivity(blue);
+		intensivityRed = convertToIntensivity(red);
+		intensivityGreen = convertToIntensivity(green);
+		intensivityBlue = convertToIntensivity(blue);
 
 		currentRed = red;
 		currentGreen = green;

@@ -3,6 +3,7 @@
 
 #define DEBUG false
 
+
 void initLogger() {
 	Serial.begin(9600);
 }

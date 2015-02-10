@@ -14,25 +14,12 @@
 
 #define IR_PIN 10
 
-#define RED_MASK 0xFF0000
-#define GREEN_MASK 0x00FF00
-#define BLUE_MASK 0x0000FF
-
 
 IRrecv irReceiver(IR_PIN);
 decode_results irResults;
 
-class RCInputController : public InputController {
+struct RCInputController : InputController {
 
-	void setColor(long color) {
-		byte red = (RED_MASK & color) >> 16;
-		byte green = (GREEN_MASK & color) >> 8;
-		byte blue = BLUE_MASK & color;
-
-		_stateMachine.setColor(red, green, blue);
-	}
-
-public:
 	RCInputController(StateMachine & stateMachine) : InputController(stateMachine) {}
 
 	void init() {
@@ -48,20 +35,20 @@ public:
 				case KEY_3:	_stateMachine.unblockMotion(); break;
 				case KEY_4:	_stateMachine.blockMotion(); _stateMachine.toggleOn(); break;
 				
-				case KEY_5: setColor(RED); break;
-				case KEY_6: setColor(GREEN); break;
-				case KEY_7: setColor(BLUE);	break;
-				case KEY_8: setColor(WHITE); break;
+				case KEY_5: _stateMachine.setColor(RED); break;
+				case KEY_6: _stateMachine.setColor(GREEN); break;
+				case KEY_7: _stateMachine.setColor(BLUE);	break;
+				case KEY_8: _stateMachine.setColor(WHITE); break;
 				
-				case KEY_9: setColor(LIGHTRED); break;
-				case KEY_10: setColor(LIGHTGREEN); break;
-				case KEY_11: setColor(LIGHTBLUE); break;
-				case KEY_12: setColor(PINK); break;
+				case KEY_9: _stateMachine.setColor(LIGHTRED); break;
+				case KEY_10: _stateMachine.setColor(LIGHTGREEN); break;
+				case KEY_11: _stateMachine.setColor(LIGHTBLUE); break;
+				case KEY_12: _stateMachine.setColor(PINK); break;
 				
-				case KEY_13: setColor(ORANGE); break;
-				case KEY_14: setColor(CYAN); break;
-				case KEY_15: setColor(PURPLE); break;
-				case KEY_16: setColor(LIGHTPINK); break;
+				case KEY_13: _stateMachine.setColor(ORANGE); break;
+				case KEY_14: _stateMachine.setColor(CYAN); break;
+				case KEY_15: _stateMachine.setColor(PURPLE); break;
+				case KEY_16: _stateMachine.setColor(LIGHTPINK); break;
 
 				case KEY_25: LOG("RED UP"); _stateMachine.turnRedLighter(); break;
 				case KEY_26: LOG("GREEN UP"); _stateMachine.turnGreenLighter(); break;

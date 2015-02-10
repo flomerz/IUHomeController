@@ -3,6 +3,7 @@
 
 #include "Logger.h"
 #include "State.h"
+#include "Colors.h"
 
 
 #define MOTION_BLOCK_MILLIS 60000
@@ -52,6 +53,10 @@ public:
 
 	void setColor(byte const & red, byte const & green, byte const & blue) {
 		setState(_state->setColor(red, green, blue));
+	}
+
+	void setColor(long rgb) {
+		setColor(red(rgb), green(rgb), blue(rgb));
 	}
 
 	void turnLighter() {

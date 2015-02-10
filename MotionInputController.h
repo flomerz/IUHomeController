@@ -4,6 +4,7 @@
 #include "InputController.h"
 #include "Logger.h"
 #include "RTCHelper.h"
+#include "Colors.h"
 
 
 #define MOTION_PIN 2
@@ -35,7 +36,7 @@ public:
 			if (digitalRead(MOTION_PIN)) {
 				LOG("Motion ON");
 				if(isNight()) {
-					_stateMachine.setColor(0, 0, 128);
+					_stateMachine.setColor(NIGHTBLUE);
 				}
 				_stateMachine.turnOn();
 			} else {
