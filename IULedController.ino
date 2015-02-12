@@ -15,6 +15,7 @@
 #include "RCInputController.h"
 #include "MotionInputController.h"
 #include "IRBarrierInputController.h"
+#include "WifiInputController.h"
 
 #include "RTCHelper.h"
 
@@ -25,6 +26,7 @@ StateMachine stateMachine(initState);
 RCInputController rcInputController(stateMachine);
 MotionInputController motionInputController(stateMachine);
 IRBarrierInputController irBarrierInputController(stateMachine);
+WifiInputController wifiInputController(stateMachine);
 
 void setup() {
 	initLogger();
@@ -34,6 +36,7 @@ void setup() {
 	rcInputController.init();
 	motionInputController.init();
 	irBarrierInputController.init();
+	wifiInputController.init();
 	
 	// init helper
 	LedOutputHelper::init();
@@ -48,4 +51,5 @@ void loop() {
 	rcInputController.check();
 	motionInputController.check();
 	irBarrierInputController.check();
+	wifiInputController.check();
  }
