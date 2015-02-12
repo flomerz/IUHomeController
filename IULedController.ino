@@ -19,7 +19,7 @@
 #include "RTCHelper.h"
 
 
-ColorState initState(255, 255, 255);
+ColorState initState(0, 0, 90);
 StateMachine stateMachine(initState);
 
 RCInputController rcInputController(stateMachine);
@@ -28,6 +28,7 @@ IRBarrierInputController irBarrierInputController(stateMachine);
 
 void setup() {
 	initLogger();
+	INFO("IU LED Controller");
 
 	// init input controllers
 	rcInputController.init();

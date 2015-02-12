@@ -7,7 +7,9 @@
 #define TX_PIN 12
 
 
-#define DEBUG false
+#define LOG_SERIAL logSerial
+
+// #define DEBUG
 
 
 SoftwareSerial logSerial(RX_PIN, TX_PIN);
@@ -17,10 +19,29 @@ void initLogger() {
 }
 
 template <typename T>
+void LOG_APPEND(T msg) {
+	#ifdef DEBUG
+		logSerial.print(msg);
+	#endif
+}
+
+template <typename T>
 void LOG(T msg) {
-	if (DEBUG) {
+	#ifdef DEBUG
 		logSerial.println(msg);
-	}
+	#endif
+}
+
+template <typename T>
+void LOG(T msg, int format) {
+	#ifdef DEBUG
+		logSerial.println(msg, format);
+	#endif
+}
+
+template <typename T>
+void INFO_APPEND(T msg) {
+	logSerial.print(msg);
 }
 
 template <typename T>
@@ -29,10 +50,8 @@ void INFO(T msg) {
 }
 
 template <typename T>
-void LOG(T msg, int format) {
-	if (DEBUG) {
-		logSerial.println(msg, format);
-	}
+void INFO(T msg, int format) {
+	logSerial.println(msg, format);
 }
 
 #endif
