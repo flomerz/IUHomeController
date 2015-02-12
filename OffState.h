@@ -2,7 +2,7 @@
 #define OFFSTATE.H
 
 #include "State.h"
-#include "LedOutputHelper.h"
+#include "LedDriver.h"
 
 
 class OffState : public State {
@@ -33,7 +33,7 @@ public:
 	// LOOP FUNCTION
 	void run() {
 		// LOG("OffState.run()");
-		LedOutputHelper::setColor(0, 0, 0);
+		LED.setColor(0, 0, 0);
 	}
 
 

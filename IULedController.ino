@@ -17,7 +17,7 @@
 #include "IRBarrierInputController.h"
 #include "WifiInputController.h"
 
-#include "RTCHelper.h"
+#include "RTCDriver.h"
 
 
 ColorState initState(0, 0, 90);
@@ -32,19 +32,19 @@ void setup() {
 	initLogger();
 	INFO("IU LED Controller");
 
+	// init drivers
+	LED.init();
+	RTC.init();
+
 	// init input controllers
 	rcInputController.init();
 	motionInputController.init();
 	irBarrierInputController.init();
 	wifiInputController.init();
-	
-	// init helper
-	LedOutputHelper::init();
-	RTCHelper::init();
 }
 
 void loop() {
-	RTCHelper::fetchTime(millis());
+	RTC.fetchTime(millis());
 
 	stateMachine.run();
 

@@ -3,7 +3,7 @@
 
 #include "InputController.h"
 #include "Logger.h"
-#include "RTCHelper.h"
+#include "RTCDriver.h"
 #include "Colors.h"
 
 
@@ -13,13 +13,13 @@
 class MotionInputController : public InputController {
 
 	bool validTime() {
-		unsigned int hour = RTCHelper::getHour();
+		unsigned int hour = RTC.getHour();
 		// 18:00 - 07:00
 		return (hour + 7) % 24 > 0 && (hour + 7) % 24 < 14;
 	}
 
 	bool isNight() {
-		unsigned int hour = RTCHelper::getHour();
+		unsigned int hour = RTC.getHour();
 		// 01:00 - 07:00
 		return hour > 1 && hour < 7;
 	}

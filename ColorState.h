@@ -2,7 +2,7 @@
 #define COLORSTATE.H
 
 #include "State.h"
-#include "LedOutputHelper.h"
+#include "LedDriver.h"
 #include "Colors.h"
 
 
@@ -61,7 +61,7 @@ public:
 	// LOOP FUNCTION
 	void run() {
 		// LOG("ColorState.run()");
-		LedOutputHelper::setColor(currentRed, currentGreen, currentBlue);
+		LED.setColor(currentRed, currentGreen, currentBlue);
 	}
 
 
