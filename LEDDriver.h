@@ -27,15 +27,16 @@ class LEDDriver {
 		INFO((int) currentBlue);
 	}
 
-	void displayColor(byte red, byte green, byte blue) const {
+	void displayColor(byte const & red, byte const & green, byte const & blue) const {
 		#ifdef ANODE
-			red = 255 - red;
-			green = 255 - green;
-			blue = 255 - blue;
+			analogWrite(RED_PIN, 255 - red);
+			analogWrite(GREEN_PIN, 255 - green);
+			analogWrite(BLUE_PIN, 255 - blue);
+		#elif
+			analogWrite(RED_PIN, red);
+			analogWrite(GREEN_PIN, green);
+			analogWrite(BLUE_PIN, blue);
 		#endif
-		analogWrite(RED_PIN, red);
-		analogWrite(GREEN_PIN, green);
-		analogWrite(BLUE_PIN, blue);
 	}
 
 public:
@@ -46,7 +47,7 @@ public:
 		displayColor(0, 0, 0);
 	}
 
-	void setColor(byte red, byte green, byte blue) const {
+	void setColor(byte const & red, byte const & green, byte const & blue) const {
 		if (currentRed != red || currentGreen != green || currentBlue != blue) {
 			currentRed = red;
 			currentGreen = green;
