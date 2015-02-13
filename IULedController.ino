@@ -10,15 +10,16 @@
 #include "Logger.h"
 
 #include "LEDDriver.h"
-#include "StateMachine.h"
-#include "ColorState.h"
+#include "RTCDriver.h"
+#include "ESP8266Driver.h"
 
 #include "RCInputController.h"
 #include "MotionInputController.h"
 #include "IRBarrierInputController.h"
 #include "WifiInputController.h"
 
-#include "RTCDriver.h"
+#include "StateMachine.h"
+#include "ColorState.h"
 
 
 ColorState initState(0, 0, 90);
@@ -36,6 +37,7 @@ void setup() {
 	// init drivers
 	LED.init();
 	RTC.init();
+	ESP8266.init();
 
 	// init input controllers
 	rcInputController.init();
