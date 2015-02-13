@@ -15,12 +15,12 @@ long lastFetchMillis = -FETCH_INTERVAL;
 
 struct RTCDriver {
 	
-	void init() {
+	void init() const {
 		Wire.begin();
 		DS3231_init(DS3231_INTCN);
 	}
 
-	void fetchTime(unsigned long currentMillis) {
+	void fetchTime(unsigned long currentMillis) const {
 		if (currentMillis - lastFetchMillis > FETCH_INTERVAL) {
 			lastFetchMillis = currentMillis;
 			DS3231_get(&lastTimestamp);
@@ -28,14 +28,16 @@ struct RTCDriver {
 		}
 	}
 	
-	unsigned int getHour() {
+	unsigned int getHour() const {
 		return lastTimestamp.hour;
 	}
 
-	void printTime() {
-		char buff[50];
-		sprintf(buff, "%02d.%02d.%d %02d:%02d:%02d", lastTimestamp.mday, lastTimestamp.mon, lastTimestamp.year, lastTimestamp.hour, lastTimestamp.min, lastTimestamp.sec);
-		INFO(buff);
+	void printTime() const {
+		#ifdef DEBUG
+			char buff[50];
+			sprintf(buff, "%02d.%02d.%d %02d:%02d:%02d", lastTimestamp.mday, lastTimestamp.mon, lastTimestamp.year, lastTimestamp.hour, lastTimestamp.min, lastTimestamp.sec);
+			INFO(buff);
+		#endif
 	}
 };
 
