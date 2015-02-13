@@ -11,7 +11,6 @@
 
 #include "LEDDriver.h"
 #include "RTCDriver.h"
-#include "ESP8266Driver.h"
 
 #include "RCInputController.h"
 #include "MotionInputController.h"
@@ -37,7 +36,6 @@ void setup() {
 	// init drivers
 	LED.init();
 	RTC.init();
-	ESP8266.init();
 
 	// init input controllers
 	rcInputController.init();

@@ -8,19 +8,28 @@
 
 #define ESP8266 ESP8266Driver()
 
-#define SERVER_PORT 80
 #define WIFI_SERIAL Serial
 
+#define AP_CONNECT_TRIES 5
+#define SERVER_PORT 80
+
 #define REQUEST_MSG_BUFFER 100
-#define LONG_TIMEOUT 5000
+#define LONG_TIMEOUT 10000
 #define SHORT_TIMEOUT 10
+
+#define CHECK_AP_CONNECTED_INTERVAL 60000
 
 
 bool WIFI_MODULE;
 bool AP_CONNECTED;
 bool SERVER_RUNNING;
 
-struct ServerInfo {
+long LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL;
+
+unsigned long CURRENT_TIMEOUT = LONG_TIMEOUT;
+unsigned long OLD_TIMEOUT = LONG_TIMEOUT;
+
+struct IPInfo {
 	char ip[16];
 	int port;
 };
@@ -33,118 +42,117 @@ struct Request {
 
 class ESP8266Driver {
 
+	void setTimeout(unsigned long const & timeout) const {
+		WIFI_SERIAL.setTimeout(timeout);
+		OLD_TIMEOUT = CURRENT_TIMEOUT;
+		CURRENT_TIMEOUT = timeout;
+	}
+
+	void resetTimeout() const {
+		setTimeout(OLD_TIMEOUT);
+	}
+
 	template <typename T>
-	bool send(T cmd, char* const ack='\0', bool const & append = false) const {
-		LOG(cmd, append);
+	bool send(T cmd, char* const ack = "OK") const {
+		if (!SERVER_RUNNING) delay(200); // lazy setup
 
 		// clear receive buffer
 		while (WIFI_SERIAL.available()) WIFI_SERIAL.read();
 
-		if (append) WIFI_SERIAL.print(cmd); else WIFI_SERIAL.println(cmd);
-		delay(500);
+		DEBUG_APPEND(cmd);
+		DEBUG_APPEND(" -> ");
+		DEBUG(ack);
 
-		#ifdef DEBUG
-			while (Serial.available() > 0) {
-				char c = Serial.read();
-				LOG_APPEND(c);
-				LOG(c, HEX);
-			}
-		#endif
+		WIFI_SERIAL.println(cmd);
 
-		return !ack || WIFI_SERIAL.find(ack);
-		// if (ack) {
-		// 	for (int i; i < 50; ++i) {
-		// 		if (WIFI_SERIAL.findUntil(ack, "busy")) {
-		// 			return true;
-		// 		}
-		// 		delay(1000);
-		// 	}
-		// 	return false;
-		// }
-		// return true;
+		return WIFI_SERIAL.find(ack);
 	}
-
-	template <typename T>
-	bool append(T cmd) const {
-		send(cmd, '\0', true);
-	}
-
-	// void send(const __FlashStringHelper* cmd) const {
-	// 	send((char* const) cmd);
-	// }
 
 	bool reset() const {
 		return send("AT+RST", "ready");
 	}
 
-	void initModule() const {
-		send("AT+CWMODE=1");
-		reset();
-		send("AT+CIPSTO=0");
-		send("AT+CIPMUX=1");
+	bool initModule() const {
+		if (send("AT+CWMODE=1")) {
+			if (reset()) {
+				return send("AT+CIPMUX=1");
+			}
+		}
+		return false;
 	}
 
 	bool joinAP() const {
-		append("AT+CWJAP=\"");
-		append(SSID);
-		append("\",\"");
-		append(PW);
-		send("\"", "OK");
-
-		for (int i; i < 5; ++i) {
-			INFO("Try Connecting to AP..");
-			delay(2000);
-			if (send("AT+CWJAP?", "+CWJAP:")) {
-				// int ssidLength = strlen(SSID);
-				// char connectedAP[ssidLength];
-				// WIFI_SERIAL.readBytesUntil('\"', connectedAP, ssidLength);
-				// connectedAP[ssidLength] = 0; // terminate string
-				// INFO(connectedAP);
-				// return !strncmp(connectedAP, SSID, ssidLength);
-				AP_CONNECTED = true;
-				return true;
+		INFO("Try Connecting to AP..");
+		char buf[128];
+		sprintf(buf, "AT+CWJAP=\"%s\",\"%s\"", SSID, PW);
+		
+		for (int i = 0; i < AP_CONNECT_TRIES; ++i) {
+			if (send(buf)) {
+				INFO("Wait for AP Response..");
+				if (isConnectedToAP(0)) {
+					return true;
+				}
+				LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL;
 			}
 		}
 		return false;
 	}
 
 	bool startServer() const {
-		return send("AT+CIPSERVER=1,80", "OK");
+		if (send("AT+CIPSERVER=1,80")) {
+			return send("AT+CIPSTO=0");
+		}
+		return false;
+	}
+
+	void close(unsigned int const & channel) const {
+		char buf[16];
+		sprintf(buf, "AT+CIPCLOSE=%i", channel);
+		send(buf);
 	}
 
 public:
 	void init() const {
-		delay(4000); // wait for module
-
 		WIFI_SERIAL.begin(9600);
-		WIFI_SERIAL.setTimeout(LONG_TIMEOUT);
+		setTimeout(LONG_TIMEOUT);
 
 		if (reset()) {
 			INFO("Wifi Module detected!");
 			WIFI_MODULE = true;
 			INFO("Setup Wifi Module..");
-			initModule();
-			if (joinAP()) {
-				INFO("Connected to AP!");
-				if (startServer()) {
-					INFO("Server started!");
-					SERVER_RUNNING = true;
-				} else {
-					INFO("Server not running!");
+			if (initModule()) {
+				if (joinAP()) {
+					INFO("Connected to AP!");
+					if (startServer()) {
+						INFO("Server started!");
+						SERVER_RUNNING = true;
+					} else {
+						INFO("Server not running!");
+					}
 				}
 			}
 		} else {
 			INFO("Wifi Module is not available!");
 		}
 
-		WIFI_SERIAL.setTimeout(SHORT_TIMEOUT);
+		setTimeout(SHORT_TIMEOUT);
 	}
 
-	bool hasWifiModule() {
+	bool hasWifiModule() const {
 		return WIFI_MODULE;
 	}
 
-	bool isConnectedToAP() {
+	bool isConnectedToAP(unsigned long currentMillis) const {
+		if (currentMillis - LAST_AP_CONNECTED_CHECK_MILLIS >= CHECK_AP_CONNECTED_INTERVAL || currentMillis < LAST_AP_CONNECTED_CHECK_MILLIS) {
+			LAST_AP_CONNECTED_CHECK_MILLIS = currentMillis;
+
+			char buf[62];
+			sprintf(buf, "+CWJAP:\"%s\"", SSID);
+
+			setTimeout(LONG_TIMEOUT);
+			AP_CONNECTED = send("AT+CWJAP?", buf);
+			resetTimeout();
+		}
 		return AP_CONNECTED;
 	}
 
@@ -152,15 +160,19 @@ public:
 		return SERVER_RUNNING;
 	}
 
-	void getServerInfo(ServerInfo & serverInfo) const {
-		WIFI_SERIAL.setTimeout(LONG_TIMEOUT);
+	IPInfo getIPInfo() const {
+		IPInfo ipInfo;
+
+		setTimeout(LONG_TIMEOUT);
 		send("AT+CIFSR", "+CIFSR:STAIP,\"");
-		WIFI_SERIAL.setTimeout(SHORT_TIMEOUT);
+		resetTimeout();
 
-		size_t len = WIFI_SERIAL.readBytesUntil('\"', serverInfo.ip, 16);
-		serverInfo.ip[len] = 0; // terminate string
+		size_t len = WIFI_SERIAL.readBytesUntil('\"', ipInfo.ip, 16);
+		ipInfo.ip[len] = 0; // terminate string
 
-		serverInfo.port = SERVER_PORT;
+		ipInfo.port = SERVER_PORT;
+
+		return ipInfo;
 	}
 
 	bool hasNewConnection() const {
@@ -170,26 +182,28 @@ public:
 		return false;
 	}
 
-	void getRequest(Request & request) const {
+	Request getRequest() const {
+		Request request;
 		request.channel = WIFI_SERIAL.parseInt();
 
 		WIFI_SERIAL.find(":");
 
 		request.length = WIFI_SERIAL.readBytesUntil('\r', request.msg, REQUEST_MSG_BUFFER);
 		request.msg[request.length] = 0; // terminate string
+
+		return request;
 	}
 
-	void response(unsigned int const channel, char* const msg) const {
-		INFO("response");
-		append("AT+CIPSEND=");
-		append(channel);
-		append(",");
-		send(strlen(msg), ">");
-		WIFI_SERIAL.setTimeout(LONG_TIMEOUT);
+	void response(unsigned int const & channel, char* const msg) const {
+		char buf[24];
+		sprintf(buf, "AT+CIPSEND=%i,%i", channel, strlen(msg));
+		send(buf, ">");
+
+		setTimeout(LONG_TIMEOUT);
 		send(msg, "SEND OK");
-		WIFI_SERIAL.setTimeout(SHORT_TIMEOUT);
-		append("AT+CIPCLOSE=");
-		send(channel);
+		resetTimeout();
+
+		close(channel);
 	}
 };
 
