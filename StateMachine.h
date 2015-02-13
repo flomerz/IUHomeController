@@ -17,7 +17,7 @@ class StateMachine {
 
 	void setState(State* state) {
 		if(_state != state) {
-			LOG("StateMachine.delete()");
+			DEBUG("StateMachine.delete()");
 			delete(_state);
 			_state = state;
 		}
@@ -34,17 +34,17 @@ public:
 	}
 
 	void turnOff() {
-		LOG("StateMachine.turnOff()");
+		DEBUG("StateMachine.turnOff()");
 		setState(_state->turnOff());
 	}
 
 	void turnOn() {
-		LOG("StateMachine.turnOn()");
+		DEBUG("StateMachine.turnOn()");
 		setState(_state->turnOn());
 	}
 
 	void toggleOn() {
-		LOG("StateMachine.toggleOn()");
+		DEBUG("StateMachine.toggleOn()");
 		if (_state->isOn()) {
 			turnOff();
 		} else {

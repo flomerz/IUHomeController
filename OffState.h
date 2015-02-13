@@ -11,17 +11,17 @@ class OffState : public State {
 
 public:
 	~OffState() {
-		LOG("~OffState()");
+		DEBUG("~OffState()");
 		delete(_oldState);
 	}
 
 	OffState(State *oldState) {
-		LOG("OffState()");
+		DEBUG("OffState()");
 		_oldState = oldState;
 	}
 
 	State* clone() {
-		LOG("OffState.clone()");
+		DEBUG("OffState.clone()");
 		return new OffState(*this);
 	}
 
@@ -32,19 +32,19 @@ public:
 
 	// LOOP FUNCTION
 	void run() {
-		// LOG("OffState.run()");
+		// DEBUG("OffState.run()");
 		LED.setColor(0, 0, 0);
 	}
 
 
 	// TRIGGERS
 	State* turnOff() {
-		LOG("OffState.turnOff()");
+		DEBUG("OffState.turnOff()");
 		return &*this;
 	}
 
 	State* turnOn() {
-		LOG("OffState.turnOn()");
+		DEBUG("OffState.turnOn()");
 		State* oldState = _oldState;
 		_oldState = 0;
 		return oldState;

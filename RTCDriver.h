@@ -21,7 +21,7 @@ struct RTCDriver {
 	}
 
 	void fetchTime(unsigned long currentMillis) const {
-		if (currentMillis - lastFetchMillis > FETCH_INTERVAL) {
+		if (currentMillis - lastFetchMillis >= FETCH_INTERVAL || currentMillis < lastFetchMillis) {
 			lastFetchMillis = currentMillis;
 			DS3231_get(&lastTimestamp);
 			printTime();
@@ -33,7 +33,7 @@ struct RTCDriver {
 	}
 
 	void printTime() const {
-		#ifdef DEBUG
+		#ifdef LOG_INFO
 			char buff[50];
 			sprintf(buff, "%02d.%02d.%d %02d:%02d:%02d", lastTimestamp.mday, lastTimestamp.mon, lastTimestamp.year, lastTimestamp.hour, lastTimestamp.min, lastTimestamp.sec);
 			INFO(buff);

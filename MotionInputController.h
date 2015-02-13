@@ -12,6 +12,8 @@
 
 class MotionInputController : public InputController {
 
+	bool on;
+
 	bool validTime() {
 		unsigned int hour = RTC.getHour();
 		// 18:00 - 07:00
@@ -34,13 +36,14 @@ public:
 	void check() {
 		if (_stateMachine.detectMotion() && validTime()) {
 			if (digitalRead(MOTION_PIN)) {
-				LOG("Motion ON");
+				if (!on) INFO("Motion - ON"); on = true;
 				if(isNight()) {
+					DEBUG("Motion - Night");
 					_stateMachine.setColor(NIGHTBLUE);
 				}
 				_stateMachine.turnOn();
 			} else {
-				LOG("Motion OFF");
+				if (on) INFO("Motion - OFF"); on = false;
 				_stateMachine.turnOff();
 			}
 		}

@@ -34,11 +34,11 @@ class ColorState : public State {
 
 public:
 	~ColorState() {
-		LOG("~ColorState()");
+		DEBUG("~ColorState()");
 	}
 
 	ColorState(byte const & red, byte const & green, byte const & blue) {
-		LOG("ColorState()");
+		DEBUG("ColorState()");
 		_red = red;
 		_green = green;
 		_blue = blue;
@@ -53,14 +53,14 @@ public:
 	}
 
 	State* clone() {
-		LOG("ColorState.clone()");
+		DEBUG("ColorState.clone()");
 		return new ColorState(*this);
 	}
 
 
 	// LOOP FUNCTION
 	void run() {
-		// LOG("ColorState.run()");
+		DEBUG("ColorState.run()");
 		LED.setColor(currentRed, currentGreen, currentBlue);
 	}
 

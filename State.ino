@@ -4,13 +4,13 @@
 
 
 State* State::turnOff() {
-	LOG("State.turnOff()");
+	DEBUG("State.turnOff()");
 	State *oldState = &*this;
 	State *oldStateClone = oldState->clone();
 	return new OffState(oldStateClone);
 }
 
 State* State::setColor(byte const & red, byte const & green, byte const & blue) {
-	LOG("State.setColor()");
+	DEBUG("State.setColor()");
 	return new ColorState(red, green, blue);
 }

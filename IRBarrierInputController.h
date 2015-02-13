@@ -8,8 +8,11 @@
 #define IRBARRIER_PIN 4
 
 
-struct IRBarrierInputController : InputController {
+class IRBarrierInputController : public InputController {
 
+	bool on;
+
+public:
 	IRBarrierInputController(StateMachine & stateMachine) : InputController(stateMachine) {}
 
 	void init() {
@@ -18,8 +21,11 @@ struct IRBarrierInputController : InputController {
 
 	void check() {
 		if (!digitalRead(IRBARRIER_PIN)) {
+			if (on) INFO("IR Barrier - OFF"); on = false;
 			_stateMachine.blockMotion();
 			_stateMachine.turnOff();
+		} else {
+			if (!on) INFO("IR Barrier - ON"); on = true;
 		}
 	}
 };

@@ -28,7 +28,7 @@ struct RCInputController : InputController {
 
 	void check() {
 		if (irReceiver.decode(&irResults)) {
-			LOG(irResults.value, HEX);
+			INFO(irResults.value, HEX);
 			switch(irResults.value) {
 				case KEY_1:	_stateMachine.turnLighter(); break;
 				case KEY_2:	_stateMachine.turnDarker(); break;

@@ -7,11 +7,11 @@
 struct State {
 
 	virtual ~State() {
-		LOG("~State()");
+		DEBUG("~State()");
 	}
 
 	State() {
-		LOG("State()");
+		DEBUG("State()");
 	}
 
 	virtual State* clone()=0;
@@ -29,7 +29,7 @@ struct State {
 	virtual State* turnOff();
 
 	virtual State* turnOn() {
-		LOG("State.turnOn()");
+		DEBUG("State.turnOn()");
 		return &*this;
 	}
 
