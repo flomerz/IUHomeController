@@ -9,6 +9,7 @@
 // Project
 #include "Logger.h"
 
+#include "LEDDriver.h"
 #include "StateMachine.h"
 #include "ColorState.h"
 
