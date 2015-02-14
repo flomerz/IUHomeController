@@ -4,11 +4,33 @@
 #include "InputController.h"
 #include "Logger.h"
 #include "ESP8266Driver.h"
+#include "WifiConfig.h"
 
 
 class WifiInputController : public InputController {
 
 	IPInfo ipInfo;
+
+	bool initWifiModule() {
+		INFO("Init Wifi Module..");
+		if (ESP8266.init()) {
+			INFO("Wifi Module initialized!");
+			if (ESP8266.joinAP(SSID, PW)) {
+				INFO("Connected to AP!");
+				if (ESP8266.startServer()) {
+					INFO("Server started!");
+					ipInfo = ESP8266.getIPInfo();
+					printIPInfo();
+					return true;
+				} else {
+					INFO("Server not running!");
+				}
+			}
+		} else {
+			INFO("Wifi Module is not available!");
+		}
+		return false;
+	}
 
 	void handleRequest() const {
 		Request request = ESP8266.getRequest();
@@ -30,6 +52,7 @@ class WifiInputController : public InputController {
 					break;
 			}
 		}
+		ESP8266.close(request.channel);
 	}
 
 	void printIPInfo() const {
@@ -52,18 +75,14 @@ public:
 	WifiInputController(StateMachine & stateMachine) : InputController(stateMachine) {}
 
 	void init() {
-		ESP8266.init();
-		if (ESP8266.isServerRunning()) {
-			ipInfo = ESP8266.getIPInfo();
-			printIPInfo();
-		} else {
+		if (!initWifiModule()) {
 			asm volatile (" jmp 0"); // reset arduino
 		}
 	}
 
 	void check() {
-		if (!ESP8266.isConnectedToAP(millis())) {
-			ESP8266.init();
+		if (!ESP8266.isConnectedToAP(SSID, millis())) {
+			initWifiModule();
 		}
 		if (ESP8266.hasNewConnection()) {
 			handleRequest();
