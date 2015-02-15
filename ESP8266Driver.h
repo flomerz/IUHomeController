@@ -16,6 +16,7 @@
 #define TIMEOUT_SEND 200
 #define TIMEOUT_SHORT 20
 
+#define AP_CONNECT_TRIES 5
 #define CHECK_AP_CONNECTED_INTERVAL 180000
 
 #define SERVER_PORT 80
@@ -82,9 +83,11 @@ public:
 		char buf[128];
 		sprintf(buf, "AT+CWJAP=\"%s\",\"%s\"", ssid, password);
 
-		if (send(buf, "OK", TIMEOUT_LONG)) {
-			LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL; // ignore check interval
-			return isConnectedToAP(ssid, 0);
+		for (int i = 0; i < AP_CONNECT_TRIES; ++i) {
+			if (send(buf, "OK", TIMEOUT_LONG)) {
+				LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL; // ignore check interval
+				return isConnectedToAP(ssid, 0);
+			}
 		}
 		return false;
 	}
