@@ -1,12 +1,12 @@
 #ifndef COLORSTATE.H
 #define COLORSTATE.H
 
-#include "State.h"
+#include "OnState.h"
 #include "Colors.h"
 #include "LEDDriver.h"
 
 
-class ColorState : public State {
+class ColorState : public OnState {
 
 	// orig colors
 	byte _red;

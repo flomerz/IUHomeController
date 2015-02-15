@@ -16,9 +16,7 @@ struct State {
 
 	virtual State* clone()=0;
 
-	virtual bool isOn() {
-		return true;
-	}
+	virtual bool isOn()=0;
 
 
 	// LOOP FUNCTION
@@ -26,12 +24,9 @@ struct State {
 
 
 	// TRIGGERS
-	virtual State* turnOff();
+	virtual State* turnOff() {}
 
-	virtual State* turnOn() {
-		DEBUG("State.turnOn()");
-		return &*this;
-	}
+	virtual State* turnOn() {}
 
 	virtual State* setColor(byte const & red, byte const & green, byte const & blue);
 
