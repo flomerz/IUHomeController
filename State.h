@@ -1,17 +1,14 @@
 #ifndef STATE.H
 #define STATE.H
 
-#include "Logger.h"
 
 
 struct State {
 
 	virtual ~State() {
-		DEBUG("~State()");
 	}
 
 	State() {
-		DEBUG("State()");
 	}
 
 	virtual State* clone()=0;

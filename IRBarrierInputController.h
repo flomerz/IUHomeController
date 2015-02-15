@@ -2,7 +2,6 @@
 #define IRBARRIERINPUTCONTROLLER.H
 
 #include "InputController.h"
-#include "Logger.h"
 
 
 #define IRBARRIER_PIN 4
@@ -21,11 +20,9 @@ public:
 
 	void check() {
 		if (!digitalRead(IRBARRIER_PIN)) {
-			if (on) INFO("IR Barrier - OFF"); on = false;
 			_stateMachine.blockMotion();
 			_stateMachine.turnOff();
 		} else {
-			if (!on) INFO("IR Barrier - ON"); on = true;
 		}
 	}
 };

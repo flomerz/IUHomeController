@@ -34,11 +34,9 @@ class ColorState : public OnState {
 
 public:
 	~ColorState() {
-		DEBUG("~ColorState()");
 	}
 
 	ColorState(byte const & red, byte const & green, byte const & blue) {
-		DEBUG("ColorState()");
 		_red = red;
 		_green = green;
 		_blue = blue;
@@ -53,14 +51,12 @@ public:
 	}
 
 	State* clone() {
-		DEBUG("ColorState.clone()");
 		return new ColorState(*this);
 	}
 
 
 	// LOOP FUNCTION
 	void run() {
-		DEBUG("ColorState.run()");
 		LED.setColor(currentRed, currentGreen, currentBlue);
 	}
 

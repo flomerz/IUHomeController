@@ -2,7 +2,6 @@
 #define RCINPUTCONTROLLER.H
 
 #include "InputController.h"
-#include "Logger.h"
 
 #include <IRremote.h>
 
@@ -28,7 +27,6 @@ struct RCInputController : InputController {
 
 	void check() {
 		if (irReceiver.decode(&irResults)) {
-			INFO(irResults.value, HEX);
 			switch(irResults.value) {
 				case KEY_1:	_stateMachine.turnLighter(); break;
 				case KEY_2:	_stateMachine.turnDarker(); break;

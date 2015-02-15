@@ -7,7 +7,6 @@
 #include <SoftwareSerial.h>
 
 // Project
-#include "Logger.h"
 
 #include "LEDDriver.h"
 #include "RTCDriver.h"
@@ -30,9 +29,6 @@ IRBarrierInputController irBarrierInputController(stateMachine);
 WifiInputController wifiInputController(stateMachine);
 
 void setup() {
-	initLogger();
-	INFO("IU HOME Controller");
-
 	// init drivers
 	LED.init();
 	RTC.init();

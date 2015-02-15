@@ -1,7 +1,6 @@
 #ifndef STATEMACHINE.H
 #define STATEMACHINE.H
 
-#include "Logger.h"
 #include "State.h"
 #include "Colors.h"
 
@@ -17,7 +16,6 @@ class StateMachine {
 
 	void setState(State* state) {
 		if(_state != state) {
-			DEBUG("StateMachine.delete()");
 			delete(_state);
 			_state = state;
 		}
@@ -34,17 +32,14 @@ public:
 	}
 
 	void turnOff() {
-		DEBUG("StateMachine.turnOff()");
 		setState(_state->turnOff());
 	}
 
 	void turnOn() {
-		DEBUG("StateMachine.turnOn()");
 		setState(_state->turnOn());
 	}
 
 	void toggleOn() {
-		DEBUG("StateMachine.toggleOn()");
 		if (_state->isOn()) {
 			turnOff();
 		} else {

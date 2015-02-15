@@ -36,7 +36,6 @@ struct RTCDriver {
 		#ifdef LOG_INFO
 			char buff[50];
 			sprintf(buff, "%02d.%02d.%d %02d:%02d:%02d", lastTimestamp.mday, lastTimestamp.mon, lastTimestamp.year, lastTimestamp.hour, lastTimestamp.min, lastTimestamp.sec);
-			INFO(buff);
 		#endif
 	}
 };

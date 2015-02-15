@@ -12,7 +12,6 @@ struct OnState : State {
 
 	// TRIGGERS
 	State* turnOn() {
-		DEBUG("OnState.turnOn()");
 		return &*this;
 	}
 

@@ -2,7 +2,6 @@
 #define ESP8266DRIVER.H
 
 #include "InputController.h"
-#include "Logger.h"
 
 
 #define ESP8266 ESP8266Driver()
@@ -43,9 +42,6 @@ class ESP8266Driver {
 	bool send(T cmd, char* const ack = "OK", unsigned long const & timeout = TIMEOUT_DEFAULT) const {
 		while (WIFI_SERIAL.available()) WIFI_SERIAL.read(); // clear receive buffer
 
-		DEBUG_APPEND(cmd);
-		DEBUG_APPEND(" -> ");
-		DEBUG(ack);
 
 		if (CURRENT_TIMEOUT != timeout) {
 			CURRENT_TIMEOUT = timeout;

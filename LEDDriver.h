@@ -1,7 +1,6 @@
 #ifndef LEDDRIVER.H
 #define LEDDRIVER.H
 
-#include "Logger.h"
 
 
 #define LED LEDDriver()
@@ -19,12 +18,6 @@ byte currentBlue;
 class LEDDriver {
 
 	void printColor() const {
-		INFO_APPEND("R: ");
-		INFO_APPEND((int) currentRed);
-		INFO_APPEND(", G: ");
-		INFO_APPEND((int) currentGreen);
-		INFO_APPEND(", B: ");
-		INFO((int) currentBlue);
 	}
 
 	void displayColor(byte const & red, byte const & green, byte const & blue) const {
