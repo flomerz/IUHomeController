@@ -1,4 +1,4 @@
-// IULedController.ino
+// IUHomeController.ino
 
 // Libraries
 #include <Wire.h>
@@ -31,7 +31,7 @@ WifiInputController wifiInputController(stateMachine);
 
 void setup() {
 	initLogger();
-	INFO("IU LED Controller");
+	INFO("IU HOME Controller");
 
 	// init drivers
 	LED.init();

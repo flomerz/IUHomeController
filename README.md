@@ -1,2 +1,2 @@
-# IULedController
-Arduino C++/INO Project
+# IU HOME Controller
+Arduino C++/INO Library
