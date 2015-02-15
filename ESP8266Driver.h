@@ -22,6 +22,8 @@
 
 #define REQUEST_MSG_BUFFER_SIZE 100
 
+#define SEND_DELAY 200
+
 
 unsigned long CURRENT_TIMEOUT = TIMEOUT_DEFAULT;
 
@@ -152,7 +154,7 @@ public:
 		send(buf, ">", TIMEOUT_SHORT);
 
 		send(msg, false);
-		delay(100); // let send
+		delay(SEND_DELAY); // let send
 	}
 
 	void close(unsigned int const & channel) const {
