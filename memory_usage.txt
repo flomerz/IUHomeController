@@ -1,0 +1,15 @@
+LOG: DEBUG
+Binary sketch size: 25658 bytes (of a 30720 byte maximum, 83.52 percent).
+Estimated memory use: 1833 bytes (of a 2048 byte maximum, 89.50 percent).
+
+LOG: INFO
+Binary sketch size: 24952 bytes (of a 30720 byte maximum, 81.22 percent).
+Estimated memory use: 1511 bytes (of a 2048 byte maximum, 73.78 percent).
+
+LOG: OFF
+Binary sketch size: 23490 bytes (of a 30720 byte maximum, 76.46 percent).
+Estimated memory use: 1213 bytes (of a 2048 byte maximum, 59.23 percent).
+
+LOG: REMOVED
+Binary sketch size: 21468 bytes (of a 30720 byte maximum, 69.88 percent).
+Estimated memory use: 1101 bytes (of a 2048 byte maximum, 53.76 percent).
