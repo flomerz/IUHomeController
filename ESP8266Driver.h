@@ -11,18 +11,16 @@
 
 #define WIFI_SERIAL_BAUD 9600
 
-#define TIMEOUT_LONG 30000
+#define TIMEOUT_LONG 10000
 #define TIMEOUT_DEFAULT 5000
+#define TIMEOUT_SEND 200
 #define TIMEOUT_SHORT 20
 
-#define AP_CONNECT_TRIES 5
 #define CHECK_AP_CONNECTED_INTERVAL 180000
 
 #define SERVER_PORT 80
 
 #define REQUEST_MSG_BUFFER_SIZE 100
-
-#define SEND_DELAY 200
 
 
 unsigned long CURRENT_TIMEOUT = TIMEOUT_DEFAULT;
@@ -83,13 +81,10 @@ public:
 	bool joinAP(char* const ssid, char* const password) const {
 		char buf[128];
 		sprintf(buf, "AT+CWJAP=\"%s\",\"%s\"", ssid, password);
-		
-		for (int i = 0; i < AP_CONNECT_TRIES; ++i) {
-			INFO("Try Connecting to AP..");
-			if (send(buf, "OK", TIMEOUT_LONG)) {
-				LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL; // ignore check interval
-				return isConnectedToAP(ssid, 0);
-			}
+
+		if (send(buf, "OK", TIMEOUT_LONG)) {
+			LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL; // ignore check interval
+			return isConnectedToAP(ssid, 0);
 		}
 		return false;
 	}
@@ -153,8 +148,7 @@ public:
 		sprintf(buf, "AT+CIPSEND=%i,%i", channel, strlen(msg));
 		send(buf, ">", TIMEOUT_SHORT);
 
-		send(msg, false);
-		delay(SEND_DELAY); // let send
+		send(msg, "SEND OK", TIMEOUT_SEND);
 	}
 
 	void close(unsigned int const & channel) const {

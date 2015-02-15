@@ -12,11 +12,12 @@ class WifiInputController : public InputController {
 	IPInfo ipInfo;
 
 	bool initWifiModule() {
-		INFO("Init Wifi Module..");
+		INFO("init Wifi Module..");
 		if (ESP8266.init()) {
 			INFO("Wifi Module initialized!");
+			INFO("try connecting to AP..");
 			if (ESP8266.joinAP(SSID, PW)) {
-				INFO("Connected to AP!");
+				INFO("connected to AP!");
 				if (ESP8266.startServer()) {
 					INFO("Server started!");
 					ipInfo = ESP8266.getIPInfo();
@@ -25,6 +26,8 @@ class WifiInputController : public InputController {
 				} else {
 					INFO("Server not running!");
 				}
+			} else {
+				INFO("AP not in reach or wrong password!");
 			}
 		} else {
 			INFO("Wifi Module is not available!");
@@ -62,10 +65,10 @@ class WifiInputController : public InputController {
 	}
 
 	void printRequest(Request & request) const {
-		INFO_APPEND("Wifi Channel: ");
+		INFO_APPEND("Wifi channel: ");
 		INFO_APPEND(request.channel);
 		INFO_APPEND(" | ");
-		INFO_APPEND("Length: ");
+		INFO_APPEND("length: ");
 		INFO_APPEND(request.length);
 		INFO_APPEND(" | ");
 		INFO(request.msg);
