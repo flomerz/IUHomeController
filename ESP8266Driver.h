@@ -11,8 +11,9 @@
 
 #define WIFI_SERIAL_BAUD 9600
 
-#define LONG_TIMEOUT 30000
-#define SHORT_TIMEOUT 5000
+#define TIMEOUT_LONG 30000
+#define TIMEOUT_DEFAULT 5000
+#define TIMEOUT_SHORT 20
 
 #define AP_CONNECT_TRIES 5
 #define CHECK_AP_CONNECTED_INTERVAL 180000
@@ -21,6 +22,8 @@
 
 #define REQUEST_MSG_BUFFER_SIZE 100
 
+
+unsigned long CURRENT_TIMEOUT = TIMEOUT_DEFAULT;
 
 bool AP_CONNECTED;
 long LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL;
@@ -39,15 +42,20 @@ struct Request {
 class ESP8266Driver {
 
 	template <typename T>
-	bool send(T cmd, char* const ack = "OK") const {
+	bool send(T cmd, char* const ack = "OK", unsigned long const & timeout = TIMEOUT_DEFAULT) const {
 		while (WIFI_SERIAL.available()) WIFI_SERIAL.read(); // clear receive buffer
 
 		DEBUG_APPEND(cmd);
 		DEBUG_APPEND(" -> ");
 		DEBUG(ack);
 
+		if (CURRENT_TIMEOUT != timeout) {
+			CURRENT_TIMEOUT = timeout;
+			WIFI_SERIAL.setTimeout(timeout);
+		}
+
 		WIFI_SERIAL.println(cmd);
-		delay(20);
+		delay(10);
 		return !ack || WIFI_SERIAL.find(ack);
 	}
 
@@ -58,7 +66,7 @@ class ESP8266Driver {
 public:
 	bool init() const {
 		WIFI_SERIAL.begin(WIFI_SERIAL_BAUD);
-		WIFI_SERIAL.setTimeout(SHORT_TIMEOUT);
+		WIFI_SERIAL.setTimeout(TIMEOUT_DEFAULT);
 
 		if (reset()) {
 			if (send("AT+CWMODE=1")) {
@@ -76,10 +84,7 @@ public:
 		
 		for (int i = 0; i < AP_CONNECT_TRIES; ++i) {
 			INFO("Try Connecting to AP..");
-			WIFI_SERIAL.setTimeout(LONG_TIMEOUT);
-			bool cmdSent = send(buf);
-			WIFI_SERIAL.setTimeout(SHORT_TIMEOUT);
-			if (cmdSent) {
+			if (send(buf, "OK", TIMEOUT_LONG)) {
 				LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL; // ignore check interval
 				return isConnectedToAP(ssid, 0);
 			}
@@ -101,7 +106,10 @@ public:
 
 	bool startServer() const {
 		if (send("AT+CIPSERVER=1,80")) {
-			return send("AT+CIPSTO=1");
+			if(send("AT+CIPSTO=1")) {
+				WIFI_SERIAL.setTimeout(TIMEOUT_SHORT);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -141,15 +149,16 @@ public:
 	void response(unsigned int const & channel, char* const msg) const {
 		char buf[24];
 		sprintf(buf, "AT+CIPSEND=%i,%i", channel, strlen(msg));
-		send(buf, ">");
+		send(buf, ">", TIMEOUT_SHORT);
 
 		send(msg, false);
+		delay(100); // let send
 	}
 
 	void close(unsigned int const & channel) const {
 		char buf[16];
 		sprintf(buf, "AT+CIPCLOSE=%i", channel);
-		send(buf, false);
+		send(buf, false, TIMEOUT_SHORT);
 	}
 };
 
