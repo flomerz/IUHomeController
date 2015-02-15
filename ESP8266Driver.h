@@ -19,8 +19,6 @@
 #define AP_CONNECT_TRIES 5
 #define CHECK_AP_CONNECTED_INTERVAL 180000
 
-#define SERVER_PORT 80
-
 #define REQUEST_MSG_BUFFER_SIZE 100
 
 
@@ -31,7 +29,6 @@ long LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL;
 
 struct IPInfo {
 	char ip[16];
-	int port;
 };
 
 struct Request {
@@ -80,11 +77,11 @@ public:
 	}
 
 	bool joinAP(char* const ssid, char* const password) const {
-		char buf[128];
-		sprintf(buf, "AT+CWJAP=\"%s\",\"%s\"", ssid, password);
+		char cmd[128];
+		sprintf(cmd, "AT+CWJAP=\"%s\",\"%s\"", ssid, password);
 
 		for (int i = 0; i < AP_CONNECT_TRIES; ++i) {
-			if (send(buf, "OK", TIMEOUT_LONG)) {
+			if (send(cmd, "OK", TIMEOUT_LONG)) {
 				LAST_AP_CONNECTED_CHECK_MILLIS = -CHECK_AP_CONNECTED_INTERVAL; // ignore check interval
 				return isConnectedToAP(ssid, 0);
 			}
@@ -96,16 +93,19 @@ public:
 		if (currentMillis - LAST_AP_CONNECTED_CHECK_MILLIS >= CHECK_AP_CONNECTED_INTERVAL || currentMillis < LAST_AP_CONNECTED_CHECK_MILLIS) {
 			LAST_AP_CONNECTED_CHECK_MILLIS = currentMillis;
 
-			char buf[62];
-			sprintf(buf, "+CWJAP:\"%s\"", ssid);
+			char cmd[62];
+			sprintf(cmd, "+CWJAP:\"%s\"", ssid);
 
-			AP_CONNECTED = send("AT+CWJAP?", buf);
+			AP_CONNECTED = send("AT+CWJAP?", cmd);
 		}
 		return AP_CONNECTED;
 	}
 
-	bool startServer() const {
-		if (send("AT+CIPSERVER=1,80")) {
+	bool startServer(unsigned int port) const {
+		char cmd[24];
+		sprintf(cmd, "AT+CIPSERVER=1,%i", port);
+
+		if (send(cmd)) {
 			if(send("AT+CIPSTO=1")) {
 				WIFI_SERIAL.setTimeout(TIMEOUT_SHORT);
 				return true;
@@ -121,8 +121,6 @@ public:
 
 		size_t len = WIFI_SERIAL.readBytesUntil('\"', ipInfo.ip, 16);
 		ipInfo.ip[len] = 0; // terminate string
-
-		ipInfo.port = SERVER_PORT;
 
 		return ipInfo;
 	}
@@ -147,17 +145,17 @@ public:
 	}
 
 	void response(unsigned int const & channel, char* const msg) const {
-		char buf[24];
-		sprintf(buf, "AT+CIPSEND=%i,%i", channel, strlen(msg));
-		send(buf, ">", TIMEOUT_SHORT);
+		char cmd[24];
+		sprintf(cmd, "AT+CIPSEND=%i,%i", channel, strlen(msg));
+		send(cmd, ">", TIMEOUT_SHORT);
 
 		send(msg, "SEND OK", TIMEOUT_SEND);
 	}
 
 	void close(unsigned int const & channel) const {
-		char buf[16];
-		sprintf(buf, "AT+CIPCLOSE=%i", channel);
-		send(buf, false, TIMEOUT_SHORT);
+		char cmd[16];
+		sprintf(cmd, "AT+CIPCLOSE=%i", channel);
+		send(cmd, false, TIMEOUT_SHORT);
 	}
 };
 

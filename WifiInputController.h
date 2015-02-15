@@ -7,6 +7,9 @@
 #include "WifiConfig.h"
 
 
+#define SERVER_PORT 80
+
+
 class WifiInputController : public InputController {
 
 	IPInfo ipInfo;
@@ -18,10 +21,10 @@ class WifiInputController : public InputController {
 			INFO("try connecting to AP..");
 			if (ESP8266.joinAP(SSID, PW)) {
 				INFO("connected to AP!");
-				if (ESP8266.startServer()) {
+				if (ESP8266.startServer(SERVER_PORT)) {
 					INFO("Server started!");
 					ipInfo = ESP8266.getIPInfo();
-					printIPInfo();
+					printInfo();
 					return true;
 				} else {
 					INFO("Server not running!");
@@ -58,10 +61,10 @@ class WifiInputController : public InputController {
 		ESP8266.close(request.channel);
 	}
 
-	void printIPInfo() const {
+	void printInfo() const {
 		INFO_APPEND(ipInfo.ip);
 		INFO_APPEND(':');
-		INFO(ipInfo.port);
+		INFO(SERVER_PORT);
 	}
 
 	void printRequest(Request & request) const {
