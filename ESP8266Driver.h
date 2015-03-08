@@ -7,6 +7,19 @@
 
 #define ESP8266 ESP8266Driver()
 
+/*
+ ~250 mA max
+
+ GND to GND
+ VCC to 3V3
+ RST to 3V3
+ CH_PD to 3V3
+ GPIO0 to 3V3
+ GPIO2 to 3V3
+ RXD to TXD (3V3)
+ TXD to RXD (3V3)
+*/
+
 #define WIFI_SERIAL Serial
 
 #define WIFI_SERIAL_BAUD 9600

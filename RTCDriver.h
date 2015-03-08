@@ -7,6 +7,13 @@
 
 #define RTC RTCDriver()
 
+/*
+ GND to GND
+ VCC to 5V
+ SDA to A4
+ SCL to A5
+*/
+
 #define FETCH_INTERVAL 60000
 
 

@@ -11,6 +11,11 @@
 // COLORS
 #include "Colors.h"
 
+/*
+ VCC to 5V
+ GND to GND
+ OUT to IR_PIN
+*/
 
 #define IR_PIN 7
 

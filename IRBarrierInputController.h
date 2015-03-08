@@ -4,6 +4,11 @@
 #include "InputController.h"
 #include "Logger.h"
 
+/*
+ GND to GND
+ OUT to IRBARRIER_PIN
+ VCC to 5V
+*/
 
 #define IRBARRIER_PIN 4
 

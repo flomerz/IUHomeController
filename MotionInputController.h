@@ -8,6 +8,12 @@
 #include "Colors.h"
 
 
+/*
+ GND to GND
+ VCC to 5V
+ OUT to MOTION_PIN
+*/
+
 #define MOTION_PIN 2
 
 
