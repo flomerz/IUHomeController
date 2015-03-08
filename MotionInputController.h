@@ -4,6 +4,7 @@
 #include "InputController.h"
 #include "Logger.h"
 #include "RTCDriver.h"
+#include "LDRDriver.h"
 #include "Colors.h"
 
 
@@ -34,14 +35,16 @@ public:
 	}
 
 	void check() {
-		if (_stateMachine.detectMotion() && validTime()) {
+		if (_stateMachine.detectMotion()) {
 			if (digitalRead(MOTION_PIN)) {
-				if (!on) INFO("Motion - ON"); on = true;
-				if(isNight()) {
-					DEBUG("Motion - Night");
-					_stateMachine.setColor(NIGHTBLUE);
+				if(validTime() && LDR.isDark()) {
+					if (!on) INFO("Motion - ON"); on = true;
+					if(isNight()) {
+						DEBUG("Motion - Night");
+						_stateMachine.setColor(NIGHTBLUE);
+					}
+					_stateMachine.turnOn();
 				}
-				_stateMachine.turnOn();
 			} else {
 				if (on) INFO("Motion - OFF"); on = false;
 				_stateMachine.turnOff();

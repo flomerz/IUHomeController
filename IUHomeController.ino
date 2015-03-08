@@ -11,6 +11,7 @@
 
 #include "LEDDriver.h"
 #include "RTCDriver.h"
+#include "LDRDriver.h"
 
 #include "RCInputController.h"
 #include "MotionInputController.h"
@@ -36,6 +37,7 @@ void setup() {
 	// init drivers
 	LED.init();
 	RTC.init();
+	LDR.init();
 
 	// init input controllers
 	rcInputController.init();
